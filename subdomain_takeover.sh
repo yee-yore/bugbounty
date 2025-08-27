@@ -23,7 +23,7 @@ TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-""}
 
 show_help() {
     cat << EOF
-SubdomainTO - Subdomain Takeover Scanner v2.0
+subdomain_takeover - Subdomain Takeover Scanner v2.0
 =====================================
 
 USAGE:
