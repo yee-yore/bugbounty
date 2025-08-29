@@ -1,0 +1,51 @@
+# Sensitive configuration files
+.env
+*.env
+.env.*
+config.sh
+credentials.txt
+
+# API Keys and Tokens
+*api_key*
+*token*
+*secret*
+
+# Scan results and output
+results/
+*.json
+*.txt
+!domain_list.txt
+!.env.example
+
+# Logs
+*.log
+scan_history.log
+
+# Progress files
+*.progress
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.bak
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Python cache (if using baddns)
+__pycache__/
+*.pyc
+*.pyo
+
+# Backup files
+*.backup
+*.old
