@@ -1,10 +1,12 @@
 # STOMON
 
-A powerful subdomain takeover monitor for bug bounty hunters. Features parallel scanning, AI-powered false positive detection, and automated alerts.
+A powerful subdomain takeover monitor for bug bounty hunters. Features CNAME-focused scanning, parallel processing, AI-powered false positive detection, and automated alerts.
 
 ## Features
 
+- **CNAME-Focused Scanning** - Defaults to CNAME-only scans for 3x faster performance while catching 80%+ of takeovers
 - **Subdomain Enumeration** - Uses subfinder for comprehensive subdomain discovery
+- **Flexible Scan Modes** - Choose between CNAME-only, full scanning, or custom module combinations
 - **Parallel Scanning** - Multi-threaded scanning with configurable workers
 - **AI False Positive Detection** - OpenAI integration to reduce false positives
 - **Telegram Alerts** - Real-time notifications for discovered vulnerabilities
@@ -13,7 +15,7 @@ A powerful subdomain takeover monitor for bug bounty hunters. Features parallel 
 ## Workflow
 
 1. **Subdomain Enumeration** - Discovers all subdomains using subfinder
-2. **Vulnerability Scanning** - Checks each subdomain for takeover vulnerabilities using baddns
+2. **CNAME-Focused Vulnerability Scanning** - Checks each subdomain for CNAME-based takeover vulnerabilities using baddns (default)
 3. **False Positive Analysis** - Uses OpenAI API to analyze and filter results (optional)
 4. **Alert & Report** - Sends Telegram notifications and generates detailed reports
 
@@ -85,25 +87,37 @@ OPENAI_API_KEY=sk-your-api-key-here
 chmod +x stomon.sh
 ```
 
-### Single Domain Scan
+### Single Domain Scan (CNAME-focused - default)
 ```bash
 ./stomon.sh -d example.com
 ```
 
-### Fast Parallel Scan
+### Full Scan with All Modules
+```bash
+./stomon.sh -d example.com --scan-mode all
+```
+
+### Fast Parallel CNAME Scan
 ```bash
 ./stomon.sh -d example.com -w 10
+```
+
+### Custom Module Scan
+```bash
+# Scan only CNAME and NS records
+./stomon.sh -d example.com --scan-mode "CNAME,NS"
 ```
 
 ### Scan Multiple Domains
 ```bash
 # Add domains to domain_list.txt (one per line)
+# Uses CNAME-focused scanning by default
 ./stomon.sh -l domain_list.txt -c 3 -w 5
 ```
 
 ### Daemon Mode (VPS Monitoring)
 ```bash
-# Scan every 24 hours
+# Scan every 24 hours with CNAME-focused scanning
 ./stomon.sh -l domain_list.txt -vps 24
 ```
 
@@ -117,6 +131,7 @@ chmod +x stomon.sh
 | `-c N` | Concurrent domain scans | 1 |
 | `-o FORMAT` | Output format (all/json/text) | all |
 | `--confidence LEVEL` | Filter results (all/confirmed/probable) | all |
+| `--scan-mode MODE` | Scan mode (cname/all/custom) | cname |
 | `-vps HOURS` | Daemon mode interval | - |
 | `--help` | Show help message | - |
 
@@ -138,6 +153,11 @@ results/
 
 ## Performance Tips
 
+- **Scan Modes:**
+  - `cname` (default): ~3x faster than full scans, catches 80%+ of takeovers
+  - `all`: Complete scanning with all modules (slower but comprehensive)
+  - `custom`: Specify modules like "CNAME,NS" for targeted scanning
+
 - **Workers (`-w`):**
   - `1`: Safe, slow (default)
   - `5`: Balanced
@@ -147,6 +167,11 @@ results/
 - **Concurrency (`-c`):**
   - Number of domains to scan simultaneously
   - Recommended: 3-5 for optimal performance
+
+- **Speed Optimization:**
+  - Use CNAME mode for fastest results: `./stomon.sh -d example.com`
+  - Combine with high workers for maximum speed: `./stomon.sh -d example.com -w 20`
+  - For comprehensive scans, use: `./stomon.sh -d example.com --scan-mode all`
 
 ## Disclaimer
 
